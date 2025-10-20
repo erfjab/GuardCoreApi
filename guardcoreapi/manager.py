@@ -11,6 +11,10 @@ from .types import (
     SubscriptionStatsResponse,
     SubscriptionUpdate,
     SubscriptionUsageLogsResponse,
+    NodeResponse,
+    NodeCreate,
+    NodeUpdate,
+    NodeStatsResponse,
 )
 
 
@@ -248,4 +252,70 @@ class GuardCoreApi:
             f"/api/subscriptions/{username}/reset",
             headers=RequestCore.generate_headers(access),
             response_model=SubscriptionResponse,
+        )
+
+    @staticmethod
+    async def get_nodes(access: str) -> list[NodeResponse]:
+        return await RequestCore.get(
+            "/api/nodes",
+            headers=RequestCore.generate_headers(access),
+            response_model=NodeResponse,
+            use_list=True,
+        )
+
+    @staticmethod
+    async def create_node(data: NodeCreate, access: str) -> NodeResponse:
+        return await RequestCore.post(
+            "/api/nodes",
+            headers=RequestCore.generate_headers(access),
+            json=data.dict(),
+            response_model=NodeResponse,
+        )
+
+    @staticmethod
+    async def get_node_stats(access: str) -> NodeStatsResponse:
+        return await RequestCore.get(
+            "/api/nodes/stats",
+            headers=RequestCore.generate_headers(access),
+            response_model=NodeStatsResponse,
+        )
+
+    @staticmethod
+    async def get_node(node_id: int, access: str) -> NodeResponse:
+        return await RequestCore.get(
+            f"/api/nodes/{node_id}",
+            headers=RequestCore.generate_headers(access),
+            response_model=NodeResponse,
+        )
+
+    @staticmethod
+    async def update_node(node_id: int, data: NodeUpdate, access: str) -> NodeResponse:
+        return await RequestCore.put(
+            f"/api/nodes/{node_id}",
+            headers=RequestCore.generate_headers(access),
+            json=data.dict(),
+            response_model=NodeResponse,
+        )
+
+    @staticmethod
+    async def delete_node(node_id: int, access: str) -> dict:
+        return await RequestCore.delete(
+            f"/api/nodes/{node_id}",
+            headers=RequestCore.generate_headers(access),
+        )
+
+    @staticmethod
+    async def enable_node(node_id: int, access: str) -> NodeResponse:
+        return await RequestCore.post(
+            f"/api/nodes/{node_id}/enable",
+            headers=RequestCore.generate_headers(access),
+            response_model=NodeResponse,
+        )
+
+    @staticmethod
+    async def disable_node(node_id: int, access: str) -> NodeResponse:
+        return await RequestCore.post(
+            f"/api/nodes/{node_id}/disable",
+            headers=RequestCore.generate_headers(access),
+            response_model=NodeResponse,
         )
