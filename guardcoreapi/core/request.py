@@ -2,6 +2,7 @@ import asyncio
 from typing import Optional
 
 import aiohttp
+from pydantic import BaseModel
 from .exceptions import (
     RequestAuthenticationError,
     RequestConnectionError,
@@ -11,7 +12,7 @@ from .exceptions import (
 
 
 class RequestCore:
-    _BASE_URL = "https://core.erfjab.com/"
+    _BASE_URL = "https://core.erfjab.com"
 
     @staticmethod
     def generate_headers(access_token: Optional[str] = None) -> dict:
@@ -31,6 +32,8 @@ class RequestCore:
         params: Optional[dict] = None,
         data: Optional[dict] = None,
         json: Optional[dict] = None,
+        response_model: Optional[BaseModel] = None,
+        use_list: bool = False,
         timeout: float = 10.0,
     ) -> dict:
         try:
@@ -46,7 +49,12 @@ class RequestCore:
                     json=json,
                 ) as response:
                     response.raise_for_status()
-                    return await response.json()
+                    resp_json = await response.json()
+                    if response_model:
+                        if use_list:
+                            return [response_model(**item) for item in resp_json]
+                        return response_model(**resp_json)
+                    return resp_json
         except aiohttp.ClientResponseError as e:
             if e.status == 401:
                 raise RequestAuthenticationError("Authentication failed") from e
@@ -62,6 +70,8 @@ class RequestCore:
         endpoint: str,
         headers: Optional[dict] = None,
         params: Optional[dict] = None,
+        response_model: Optional[BaseModel] = None,
+        use_list: bool = False,
         timeout: float = 10.0,
     ) -> dict:
         return await RequestCore.fetch(
@@ -70,6 +80,8 @@ class RequestCore:
             headers=headers,
             params=params,
             timeout=timeout,
+            use_list=use_list,
+            response_model=response_model,
         )
 
     @staticmethod
@@ -79,6 +91,8 @@ class RequestCore:
         data: Optional[dict] = None,
         json: Optional[dict] = None,
         timeout: float = 10.0,
+        response_model: Optional[BaseModel] = None,
+        use_list: bool = False,
     ) -> dict:
         return await RequestCore.fetch(
             endpoint=endpoint,
@@ -87,6 +101,8 @@ class RequestCore:
             data=data,
             json=json,
             timeout=timeout,
+            response_model=response_model,
+            use_list=use_list,
         )
 
     @staticmethod
@@ -96,6 +112,8 @@ class RequestCore:
         data: Optional[dict] = None,
         json: Optional[dict] = None,
         timeout: float = 10.0,
+        response_model: Optional[BaseModel] = None,
+        use_list: bool = False,
     ) -> dict:
         return await RequestCore.fetch(
             endpoint=endpoint,
@@ -104,6 +122,8 @@ class RequestCore:
             data=data,
             json=json,
             timeout=timeout,
+            response_model=response_model,
+            use_list=use_list,
         )
 
     @staticmethod
