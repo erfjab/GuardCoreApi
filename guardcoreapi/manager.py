@@ -366,3 +366,9 @@ class GuardCoreApi:
             f"/api/services/{service_id}",
             headers=RequestCore.generate_headers(access),
         )
+
+    @staticmethod
+    async def get_guard(secret: str) -> list[str]:
+        return await RequestCore.get(
+            f"/api/guards/{secret}",
+        )
