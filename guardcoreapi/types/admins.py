@@ -64,6 +64,7 @@ class AdminResponse(BaseModel):
     reached_usage_limit: Optional[bool]
     placeholders: Optional[list[AdminPlaceHolder]]
     max_links: Optional[int]
+    shuffle_links: Optional[bool]
     last_login_at: Optional[datetime]
     last_online_at: Optional[datetime]
     created_at: datetime
