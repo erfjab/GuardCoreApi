@@ -15,6 +15,9 @@ from .types import (
     NodeCreate,
     NodeUpdate,
     NodeStatsResponse,
+    ServiceCreate,
+    ServiceResponse,
+    ServiceUpdate,
 )
 
 
@@ -318,4 +321,48 @@ class GuardCoreApi:
             f"/api/nodes/{node_id}/disable",
             headers=RequestCore.generate_headers(access),
             response_model=NodeResponse,
+        )
+
+    @staticmethod
+    async def get_services(access: str) -> list[ServiceResponse]:
+        return await RequestCore.get(
+            "/api/services",
+            headers=RequestCore.generate_headers(access),
+            response_model=ServiceResponse,
+            use_list=True,
+        )
+
+    @staticmethod
+    async def create_service(data: ServiceCreate, access: str) -> ServiceResponse:
+        return await RequestCore.post(
+            "/api/services",
+            headers=RequestCore.generate_headers(access),
+            json=data.dict(),
+            response_model=ServiceResponse,
+        )
+
+    @staticmethod
+    async def get_service(service_id: int, access: str) -> ServiceResponse:
+        return await RequestCore.get(
+            f"/api/services/{service_id}",
+            headers=RequestCore.generate_headers(access),
+            response_model=ServiceResponse,
+        )
+
+    @staticmethod
+    async def update_service(
+        service_id: int, data: ServiceUpdate, access: str
+    ) -> ServiceResponse:
+        return await RequestCore.put(
+            f"/api/services/{service_id}",
+            headers=RequestCore.generate_headers(access),
+            json=data.dict(),
+            response_model=ServiceResponse,
+        )
+
+    @staticmethod
+    async def delete_service(service_id: int, access: str) -> dict:
+        return await RequestCore.delete(
+            f"/api/services/{service_id}",
+            headers=RequestCore.generate_headers(access),
         )

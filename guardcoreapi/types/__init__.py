@@ -26,6 +26,7 @@ from .nodes import (
     NodeUpdate,
     NodeStatsResponse,
 )
+from .services import ServiceResponse, ServiceCreate, ServiceUpdate
 
 
 __all__ = [
@@ -51,4 +52,7 @@ __all__ = [
     "NodeCreate",
     "NodeUpdate",
     "NodeStatsResponse",
+    "ServiceResponse",
+    "ServiceCreate",
+    "ServiceUpdate",
 ]
