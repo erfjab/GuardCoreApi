@@ -65,6 +65,7 @@ class AdminResponse(BaseModel):
     placeholders: Optional[list[AdminPlaceHolder]]
     max_links: Optional[int]
     shuffle_links: Optional[bool]
+    api_key: str
     last_login_at: Optional[datetime]
     last_online_at: Optional[datetime]
     created_at: datetime

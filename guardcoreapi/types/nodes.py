@@ -16,6 +16,8 @@ class NodeResponse(BaseModel):
     username: str
     password: str
     host: str
+    offset_link: int
+    batch_size: int
     created_at: datetime
     updated_at: datetime
 
@@ -30,6 +32,7 @@ class NodeCreate(BaseModel):
     password: str
     host: str
     offset_link: int = 0
+    batch_size: int = 1
 
 
 class NodeUpdate(BaseModel):
@@ -38,6 +41,7 @@ class NodeUpdate(BaseModel):
     password: str | None = None
     host: str | None = None
     offset_link: int | None = None
+    batch_size: int | None = None
 
 
 class NodeStatsResponse(BaseModel):
