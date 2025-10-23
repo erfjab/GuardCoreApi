@@ -22,7 +22,7 @@ class RequestCore:
         }
 
         if api_key:
-            headers["X-API-Key"] = f"{api_key}"
+            headers["X-API-Key"] = api_key
         return headers
 
     @staticmethod
