@@ -11,6 +11,7 @@ class SubscriptionResponse(BaseModel):
 
     enabled: bool
     activated: bool
+    reached: bool
     limited: bool
     expired: bool
     is_active: bool
