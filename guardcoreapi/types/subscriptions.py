@@ -24,6 +24,7 @@ class SubscriptionResponse(BaseModel):
     current_usage: int
     limit_expire: int
 
+    online_at: Optional[datetime]
     last_reset_at: Optional[datetime]
     last_revoke_at: Optional[datetime]
     last_request_at: Optional[datetime]
