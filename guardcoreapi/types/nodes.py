@@ -16,6 +16,8 @@ class NodeResponse(BaseModel):
     username: str
     password: str
     host: str
+    current_usage: int
+    last_used_at: datetime | None
     offset_link: int
     batch_size: int
     created_at: datetime
