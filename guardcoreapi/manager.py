@@ -18,6 +18,7 @@ from .types import (
     ServiceCreate,
     ServiceResponse,
     ServiceUpdate,
+    StatsResponse,
 )
 
 
@@ -378,4 +379,25 @@ class GuardCoreApi:
     async def get_guard(secret: str) -> list[str]:
         return await RequestCore.get(
             f"/api/guards/{secret}",
+        )
+
+    @staticmethod
+    async def get_guard_info(secret: str) -> SubscriptionResponse:
+        return await RequestCore.get(
+            f"/api/guards/{secret}/info",
+        )
+
+    @staticmethod
+    async def get_guard_usage_logs(secret: str) -> SubscriptionUsageLogsResponse:
+        return await RequestCore.get(
+            f"/api/guards/{secret}/usages",
+            response_model=SubscriptionUsageLogsResponse,
+        )
+
+    @staticmethod
+    async def get_stats(api_key: str) -> StatsResponse:
+        return await RequestCore.get(
+            "/api/stats",
+            headers=RequestCore.generate_headers(api_key),
+            response_model=StatsResponse,
         )
