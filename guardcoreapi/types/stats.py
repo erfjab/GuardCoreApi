@@ -29,6 +29,6 @@ class StatsResponse(BaseModel):
 
     total_lifetime_usages: int
     total_day_usages: int
-    total_week_usages: list[UsageDetailStats]
+    total_week_usages: int
     last_24h_usages: list[UsageDetailStats]
     last_7d_usages: list[UsageDetailStats]
