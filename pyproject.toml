@@ -1,6 +1,6 @@
 [project]
 name = "guardcoreapi"
-version = "0.2.6"
+version = "0.2.7"
 description = "Guard Management Core Api Python lib"
 readme = "README.md"
 requires-python = ">=3.11"
