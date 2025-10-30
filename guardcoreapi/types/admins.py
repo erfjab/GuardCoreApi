@@ -68,6 +68,8 @@ class AdminResponse(BaseModel):
     api_key: str
     last_login_at: Optional[datetime]
     last_online_at: Optional[datetime]
+    access_title: Optional[str] = None
+    access_description: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 

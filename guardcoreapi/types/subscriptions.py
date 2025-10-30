@@ -15,6 +15,7 @@ class SubscriptionResponse(BaseModel):
     limited: bool
     expired: bool
     is_active: bool
+    is_online: bool
 
     link: str
 
