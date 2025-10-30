@@ -102,6 +102,8 @@ class AdminUpdate(BaseModel):
     max_links: Optional[int] = None
     shuffle_links: Optional[bool] = None
     access_prefix: Optional[str] = None
+    access_title: Optional[str] = None
+    access_description: Optional[str] = None
 
 
 class AdminCurrentUpdate(BaseModel):
@@ -109,6 +111,8 @@ class AdminCurrentUpdate(BaseModel):
     placeholders: Optional[list[AdminPlaceHolder]] = None
     max_links: Optional[int] = None
     shuffle_links: Optional[bool] = None
+    access_title: Optional[str] = None
+    access_description: Optional[str] = None
 
 
 class AdminUsageLog(BaseModel):
