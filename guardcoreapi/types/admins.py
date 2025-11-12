@@ -36,6 +36,7 @@ class AdminPlaceHolder(BaseModel):
 
 class AdminRole(StrEnum):
     OWNER = "owner"
+    SELLER = "seller"
     RESELLER = "reseller"
 
 
@@ -47,7 +48,6 @@ class AdminToken(BaseModel):
 class AdminResponse(BaseModel):
     id: int
     enabled: bool
-    removed: bool
     username: str
     role: AdminRole
     service_ids: list[int]

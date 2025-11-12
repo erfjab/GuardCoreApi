@@ -19,6 +19,7 @@ from .types import (
     ServiceResponse,
     ServiceUpdate,
     StatsResponse,
+    AdminStatsResponseNew,
 )
 
 
@@ -100,8 +101,8 @@ class GuardCoreApi:
 
     @staticmethod
     async def delete_admin(username: str, api_key: str) -> dict:
-        return await RequestCore.post(
-            f"/api/admins/{username}/delete",
+        return await RequestCore.delete(
+            f"/api/admins/{username}",
             headers=RequestCore.generate_headers(api_key),
         )
 
@@ -125,6 +126,14 @@ class GuardCoreApi:
     async def disable_admin(username: str, api_key: str) -> AdminResponse:
         return await RequestCore.post(
             f"/api/admins/{username}/disable",
+            headers=RequestCore.generate_headers(api_key),
+            response_model=AdminResponse,
+        )
+
+    @staticmethod
+    async def revoke_admin_api_key(username: str, api_key: str) -> AdminResponse:
+        return await RequestCore.post(
+            f"/api/admins/{username}/revoke",
             headers=RequestCore.generate_headers(api_key),
             response_model=AdminResponse,
         )
@@ -169,10 +178,42 @@ class GuardCoreApi:
         )
 
     @staticmethod
-    async def get_all_subscriptions(api_key: str) -> list[SubscriptionResponse]:
+    async def get_all_subscriptions(
+        api_key: str,
+        limited: bool | None = None,
+        expired: bool | None = None,
+        is_active: bool | None = None,
+        enabled: bool | None = None,
+        search: str | None = None,
+        online: bool | None = None,
+        order_by: str | None = None,
+        page: int | None = 1,
+        size: int | None = 10,
+    ) -> list[SubscriptionResponse]:
+        params = {}
+        if limited is not None:
+            params["limited"] = limited
+        if expired is not None:
+            params["expired"] = expired
+        if is_active is not None:
+            params["is_active"] = is_active
+        if enabled is not None:
+            params["enabled"] = enabled
+        if search is not None:
+            params["search"] = search
+        if online is not None:
+            params["online"] = online
+        if order_by is not None:
+            params["order_by"] = order_by
+        if page is not None:
+            params["page"] = page
+        if size is not None:
+            params["size"] = size
+
         return await RequestCore.get(
             "/api/subscriptions",
             headers=RequestCore.generate_headers(api_key),
+            params=params,
             response_model=SubscriptionResponse,
             use_list=True,
         )
@@ -187,6 +228,33 @@ class GuardCoreApi:
             json=[item.dict() for item in data],
             response_model=SubscriptionResponse,
             use_list=True,
+        )
+
+    @staticmethod
+    async def get_subscription_count(
+        api_key: str,
+        limited: bool | None = None,
+        expired: bool | None = None,
+        is_active: bool | None = None,
+        enabled: bool | None = None,
+        online: bool | None = None,
+    ) -> int:
+        params = {}
+        if limited is not None:
+            params["limited"] = limited
+        if expired is not None:
+            params["expired"] = expired
+        if is_active is not None:
+            params["is_active"] = is_active
+        if enabled is not None:
+            params["enabled"] = enabled
+        if online is not None:
+            params["online"] = online
+
+        return await RequestCore.get(
+            "/api/subscriptions/count",
+            headers=RequestCore.generate_headers(api_key),
+            params=params,
         )
 
     @staticmethod
@@ -263,6 +331,20 @@ class GuardCoreApi:
             f"/api/subscriptions/{username}/reset",
             headers=RequestCore.generate_headers(api_key),
             response_model=SubscriptionResponse,
+        )
+
+    @staticmethod
+    async def bulk_add_service(service_id: int, api_key: str) -> dict:
+        return await RequestCore.post(
+            f"/api/subscriptions/services/{service_id}",
+            headers=RequestCore.generate_headers(api_key),
+        )
+
+    @staticmethod
+    async def bulk_remove_service(service_id: int, api_key: str) -> dict:
+        return await RequestCore.delete(
+            f"/api/subscriptions/services/{service_id}",
+            headers=RequestCore.generate_headers(api_key),
         )
 
     @staticmethod
@@ -378,19 +460,19 @@ class GuardCoreApi:
     @staticmethod
     async def get_guard(secret: str) -> list[str]:
         return await RequestCore.get(
-            f"/api/guards/{secret}",
+            f"/guards/{secret}",
         )
 
     @staticmethod
     async def get_guard_info(secret: str) -> SubscriptionResponse:
         return await RequestCore.get(
-            f"/api/guards/{secret}/info",
+            f"/guards/{secret}/info",
         )
 
     @staticmethod
     async def get_guard_usage_logs(secret: str) -> SubscriptionUsageLogsResponse:
         return await RequestCore.get(
-            f"/api/guards/{secret}/usages",
+            f"/guards/{secret}/usages",
             response_model=SubscriptionUsageLogsResponse,
         )
 
@@ -400,4 +482,12 @@ class GuardCoreApi:
             "/api/stats",
             headers=RequestCore.generate_headers(api_key),
             response_model=StatsResponse,
+        )
+
+    @staticmethod
+    async def get_admin_stats_combined(api_key: str) -> AdminStatsResponseNew:
+        return await RequestCore.get(
+            "/api/stats/admin",
+            headers=RequestCore.generate_headers(api_key),
+            response_model=AdminStatsResponseNew,
         )

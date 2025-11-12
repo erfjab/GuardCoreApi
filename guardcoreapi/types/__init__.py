@@ -27,7 +27,14 @@ from .nodes import (
     NodeStatsResponse,
 )
 from .services import ServiceResponse, ServiceCreate, ServiceUpdate
-from .stats import StatsResponse
+from .stats import (
+    StatsResponse,
+    UsageDetailStats,
+    CountDetailStats,
+    TopSubDetailStats,
+    ExpireSubDetailStats,
+    AdminStatsResponseNew,
+)
 
 __all__ = [
     "AdminPlaceHolderCategory",
@@ -56,4 +63,9 @@ __all__ = [
     "ServiceCreate",
     "ServiceUpdate",
     "StatsResponse",
+    "UsageDetailStats",
+    "CountDetailStats",
+    "TopSubDetailStats",
+    "ExpireSubDetailStats",
+    "AdminStatsResponseNew",
 ]
