@@ -15,7 +15,9 @@ class RequestCore:
     _BASE_URL = "https://core.erfjab.com"
 
     @staticmethod
-    def generate_headers(api_key: Optional[str] = None) -> dict:
+    def generate_headers(
+        api_key: Optional[str] = None, access_token: Optional[str] = None
+    ) -> dict:
         headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -23,6 +25,8 @@ class RequestCore:
 
         if api_key:
             headers["X-API-Key"] = api_key
+        elif access_token:
+            headers["Authorization"] = f"Bearer {access_token}"
         return headers
 
     @staticmethod
