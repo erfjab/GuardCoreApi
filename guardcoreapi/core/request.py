@@ -25,7 +25,7 @@ class RequestCore:
 
         if api_key:
             headers["X-API-Key"] = api_key
-        elif access_token:
+        if access_token:
             headers["Authorization"] = f"Bearer {access_token}"
         return headers
 
