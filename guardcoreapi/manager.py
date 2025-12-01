@@ -18,8 +18,10 @@ from .types import (
     ServiceCreate,
     ServiceResponse,
     ServiceUpdate,
-    StatsResponse,
-    AdminStatsResponseNew,
+    SubscriptionStatusStatsResponse,
+    MostUsageSubscription,
+    UsageStatsResponse,
+    AgentStatsResponse,
 )
 
 
@@ -83,11 +85,21 @@ class GuardCoreApi:
     @staticmethod
     async def get_current_admin_usages(
         api_key: str | None = None, access_token: str | None = None
-    ) -> dict:
+    ) -> AdminUsageLogsResponse:
         return await RequestCore.get(
             "/api/admins/current/usages",
             headers=RequestCore.generate_headers(api_key, access_token),
             response_model=AdminUsageLogsResponse,
+        )
+
+    @staticmethod
+    async def revoke_current_admin_api_key(
+        api_key: str | None = None, access_token: str | None = None
+    ) -> AdminResponse:
+        return await RequestCore.post(
+            "/api/admins/current/revoke",
+            headers=RequestCore.generate_headers(api_key, access_token),
+            response_model=AdminResponse,
         )
 
     @staticmethod
@@ -126,7 +138,7 @@ class GuardCoreApi:
     @staticmethod
     async def get_admin_usages(
         username: str, api_key: str | None = None, access_token: str | None = None
-    ) -> dict:
+    ) -> AdminUsageLogsResponse:
         return await RequestCore.get(
             f"/api/admins/{username}/usages",
             headers=RequestCore.generate_headers(api_key, access_token),
@@ -565,21 +577,49 @@ class GuardCoreApi:
         )
 
     @staticmethod
-    async def get_stats(
+    async def get_subscription_status_stats(
         api_key: str | None = None, access_token: str | None = None
-    ) -> StatsResponse:
+    ) -> SubscriptionStatusStatsResponse:
         return await RequestCore.get(
-            "/api/stats",
+            "/api/stats/subscriptions/status",
             headers=RequestCore.generate_headers(api_key, access_token),
-            response_model=StatsResponse,
+            response_model=SubscriptionStatusStatsResponse,
         )
 
     @staticmethod
-    async def get_admin_stats_combined(
-        api_key: str | None = None, access_token: str | None = None
-    ) -> AdminStatsResponseNew:
+    async def get_most_usage_subscriptions(
+        start_date: str,
+        end_date: str,
+        api_key: str | None = None,
+        access_token: str | None = None,
+    ) -> MostUsageSubscription:
         return await RequestCore.get(
-            "/api/stats/admin",
+            "/api/stats/subscriptions/most_usage",
             headers=RequestCore.generate_headers(api_key, access_token),
-            response_model=AdminStatsResponseNew,
+            params={"start_date": start_date, "end_date": end_date},
+            response_model=MostUsageSubscription,
+        )
+
+    @staticmethod
+    async def get_usage_stats(
+        start_date: str,
+        end_date: str,
+        api_key: str | None = None,
+        access_token: str | None = None,
+    ) -> UsageStatsResponse:
+        return await RequestCore.get(
+            "/api/stats/usage",
+            headers=RequestCore.generate_headers(api_key, access_token),
+            params={"start_date": start_date, "end_date": end_date},
+            response_model=UsageStatsResponse,
+        )
+
+    @staticmethod
+    async def get_agent_stats(
+        api_key: str | None = None, access_token: str | None = None
+    ) -> AgentStatsResponse:
+        return await RequestCore.get(
+            "/api/stats/agents",
+            headers=RequestCore.generate_headers(api_key, access_token),
+            response_model=AgentStatsResponse,
         )

@@ -31,6 +31,9 @@ ADMIN_PLACEHOLDER_REMARK_FORMATS = [
 
 class AdminPlaceHolder(BaseModel):
     remark: str
+    uuid: Optional[str] = None
+    address: Optional[str] = None
+    port: Optional[int] = None
     categories: list[AdminPlaceHolderCategory]
 
 
@@ -66,10 +69,19 @@ class AdminResponse(BaseModel):
     max_links: Optional[int]
     shuffle_links: Optional[bool]
     api_key: str
-    last_login_at: Optional[datetime]
-    last_online_at: Optional[datetime]
     access_title: Optional[str] = None
     access_description: Optional[str] = None
+    telegram_id: Optional[str]
+    telegram_token: Optional[str]
+    expire_warning_days: Optional[int]
+    usage_warning_percent: Optional[int]
+    username_tag: Optional[bool] = None
+    support_url: Optional[str] = None
+    update_interval: Optional[int] = None
+    announce: Optional[str] = None
+    announce_url: Optional[str] = None
+    last_login_at: Optional[datetime]
+    last_online_at: Optional[datetime]
     created_at: datetime
     updated_at: datetime
 
@@ -88,6 +100,20 @@ class AdminCreate(BaseModel):
     count_limit: Optional[int] = None
     usage_limit: Optional[int] = None
     access_prefix: Optional[str] = None
+    placeholders: Optional[list[AdminPlaceHolder]] = None
+    max_links: Optional[int] = None
+    shuffle_links: Optional[bool] = None
+    access_title: Optional[str] = None
+    access_description: Optional[str] = None
+    telegram_id: Optional[str] = None
+    telegram_token: Optional[str] = None
+    expire_warning_days: Optional[int] = None
+    usage_warning_percent: Optional[int] = None
+    username_tag: Optional[bool] = None
+    support_url: Optional[str] = None
+    update_interval: Optional[int] = None
+    announce: Optional[str] = None
+    announce_url: Optional[str] = None
 
 
 class AdminUpdate(BaseModel):
@@ -104,6 +130,15 @@ class AdminUpdate(BaseModel):
     access_prefix: Optional[str] = None
     access_title: Optional[str] = None
     access_description: Optional[str] = None
+    telegram_id: Optional[str] = None
+    telegram_token: Optional[str] = None
+    expire_warning_days: Optional[int] = None
+    announce: Optional[str] = None
+    announce_url: Optional[str] = None
+    usage_warning_percent: Optional[int] = None
+    username_tag: Optional[bool] = None
+    support_url: Optional[str] = None
+    update_interval: Optional[int] = None
 
 
 class AdminCurrentUpdate(BaseModel):
@@ -113,6 +148,15 @@ class AdminCurrentUpdate(BaseModel):
     shuffle_links: Optional[bool] = None
     access_title: Optional[str] = None
     access_description: Optional[str] = None
+    telegram_id: Optional[str] = None
+    telegram_token: Optional[str] = None
+    expire_warning_days: Optional[int] = None
+    usage_warning_percent: Optional[int] = None
+    username_tag: Optional[bool] = None
+    support_url: Optional[str] = None
+    update_interval: Optional[int] = None
+    announce: Optional[str] = None
+    announce_url: Optional[str] = None
 
 
 class AdminUsageLog(BaseModel):
