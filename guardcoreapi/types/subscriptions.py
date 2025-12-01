@@ -26,6 +26,7 @@ class SubscriptionResponse(BaseModel):
     limit_expire: int
 
     service_ids: list[int]
+    note: Optional[str]
 
     online_at: Optional[datetime]
     last_reset_at: Optional[datetime]
@@ -45,12 +46,15 @@ class SubscriptionCreate(BaseModel):
     limit_expire: int
     service_ids: list[int]
     access_key: Optional[str] = None
+    note: Optional[str] = None
 
 
 class SubscriptionUpdate(BaseModel):
+    username: Optional[str] = None
     limit_usage: Optional[int] = None
     limit_expire: Optional[int] = None
     service_ids: Optional[list[int]] = None
+    note: Optional[str] = None
 
 
 class SubscriptionUsageLog(BaseModel):

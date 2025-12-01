@@ -28,12 +28,13 @@ from .nodes import (
 )
 from .services import ServiceResponse, ServiceCreate, ServiceUpdate
 from .stats import (
-    StatsResponse,
-    UsageDetailStats,
-    CountDetailStats,
-    TopSubDetailStats,
-    ExpireSubDetailStats,
-    AdminStatsResponseNew,
+    UsageDetail,
+    UsageSubscriptionDetail,
+    AgentStatsDetail,
+    SubscriptionStatusStatsResponse,
+    MostUsageSubscription,
+    UsageStatsResponse,
+    AgentStatsResponse,
 )
 
 __all__ = [
@@ -62,10 +63,11 @@ __all__ = [
     "ServiceResponse",
     "ServiceCreate",
     "ServiceUpdate",
-    "StatsResponse",
-    "UsageDetailStats",
-    "CountDetailStats",
-    "TopSubDetailStats",
-    "ExpireSubDetailStats",
-    "AdminStatsResponseNew",
+    "UsageDetail",
+    "UsageSubscriptionDetail",
+    "AgentStatsDetail",
+    "SubscriptionStatusStatsResponse",
+    "MostUsageSubscription",
+    "UsageStatsResponse",
+    "AgentStatsResponse",
 ]

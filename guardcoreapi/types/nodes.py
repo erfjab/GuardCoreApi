@@ -18,6 +18,7 @@ class NodeResponse(BaseModel):
     host: str
     current_usage: int
     last_used_at: datetime | None
+    usage_rate: float | None
     offset_link: int
     batch_size: int
     created_at: datetime
@@ -35,6 +36,7 @@ class NodeCreate(BaseModel):
     host: str
     offset_link: int = 0
     batch_size: int = 1
+    usage_rate: float = 1.0
 
 
 class NodeUpdate(BaseModel):
@@ -44,6 +46,7 @@ class NodeUpdate(BaseModel):
     host: str | None = None
     offset_link: int | None = None
     batch_size: int | None = None
+    usage_rate: float | None = None
 
 
 class NodeStatsResponse(BaseModel):
