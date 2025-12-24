@@ -6,6 +6,7 @@ class ServiceResponse(BaseModel):
     id: int
     remark: str
     node_ids: List[int]
+    users_count: int | None
 
     class Config:
         from_attributes = True

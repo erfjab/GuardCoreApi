@@ -22,6 +22,7 @@ from .types import (
     MostUsageSubscription,
     UsageStatsResponse,
     AgentStatsResponse,
+    LastReachedSubscriptionDetail,
 )
 
 
@@ -49,9 +50,15 @@ class GuardCoreApi:
         )
 
     @staticmethod
-    async def generate_admin_token(username: str, password: str) -> AdminToken:
+    async def generate_admin_token(
+        username: str, password: str, totp_code: str | None = None
+    ) -> AdminToken:
+        params = {}
+        if totp_code:
+            params["totp_code"] = totp_code
         return await RequestCore.post(
             "/api/admins/token",
+            params=params,
             data={
                 "username": username,
                 "password": password,
@@ -72,13 +79,14 @@ class GuardCoreApi:
     @staticmethod
     async def update_current_admin(
         data: AdminCurrentUpdate,
+        code: str | None = None,
         api_key: str | None = None,
         access_token: str | None = None,
     ) -> AdminResponse:
         return await RequestCore.put(
             "/api/admins/current",
             headers=RequestCore.generate_headers(api_key, access_token),
-            json=data.dict(),
+            json={"data": data.dict(), "code": code},
             response_model=AdminResponse,
         )
 
@@ -100,6 +108,39 @@ class GuardCoreApi:
             "/api/admins/current/revoke",
             headers=RequestCore.generate_headers(api_key, access_token),
             response_model=AdminResponse,
+        )
+
+    @staticmethod
+    async def revoke_totp_secret(
+        code: str | None = None,
+        api_key: str | None = None,
+        access_token: str | None = None,
+    ) -> dict:
+        return await RequestCore.post(
+            "/api/admins/current/totp/revoke",
+            headers=RequestCore.generate_headers(api_key, access_token),
+            json={"code": code},
+        )
+
+    @staticmethod
+    async def verify_totp_secret(
+        code: str,
+        api_key: str | None = None,
+        access_token: str | None = None,
+    ) -> dict:
+        return await RequestCore.post(
+            "/api/admins/current/totp/verify",
+            headers=RequestCore.generate_headers(api_key, access_token),
+            json={"code": code},
+        )
+
+    @staticmethod
+    async def get_current_admin_backup(
+        api_key: str | None = None, access_token: str | None = None
+    ) -> dict:
+        return await RequestCore.get(
+            "/api/admins/current/backup",
+            headers=RequestCore.generate_headers(api_key, access_token),
         )
 
     @staticmethod
@@ -622,4 +663,26 @@ class GuardCoreApi:
             "/api/stats/agents",
             headers=RequestCore.generate_headers(api_key, access_token),
             response_model=AgentStatsResponse,
+        )
+
+    @staticmethod
+    async def get_last_reached_subscriptions(
+        page: int = 1,
+        size: int = 20,
+        start_date: str | None = None,
+        end_date: str | None = None,
+        api_key: str | None = None,
+        access_token: str | None = None,
+    ) -> list[LastReachedSubscriptionDetail]:
+        params = {"page": page, "size": size}
+        if start_date:
+            params["start_date"] = start_date
+        if end_date:
+            params["end_date"] = end_date
+        return await RequestCore.get(
+            "/api/stats/subscriptions/reacheds",
+            headers=RequestCore.generate_headers(api_key, access_token),
+            params=params,
+            response_model=LastReachedSubscriptionDetail,
+            use_list=True,
         )

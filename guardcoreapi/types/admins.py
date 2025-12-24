@@ -69,10 +69,19 @@ class AdminResponse(BaseModel):
     max_links: Optional[int]
     shuffle_links: Optional[bool]
     api_key: str
+    totp_status: Optional[bool]
     access_title: Optional[str] = None
+    access_prefix: Optional[str] = None
     access_description: Optional[str] = None
     telegram_id: Optional[str]
     telegram_token: Optional[str]
+    telegram_logger_id: Optional[str]
+    telegram_topic_id: Optional[str]
+    telegram_status: Optional[bool]
+    telegram_send_subscriptions: Optional[bool]
+    discord_webhook_status: Optional[bool]
+    discord_webhook_url: Optional[str]
+    discord_send_subscriptions: Optional[bool]
     expire_warning_days: Optional[int]
     usage_warning_percent: Optional[int]
     username_tag: Optional[bool] = None
@@ -82,6 +91,7 @@ class AdminResponse(BaseModel):
     announce_url: Optional[str] = None
     last_login_at: Optional[datetime]
     last_online_at: Optional[datetime]
+    last_backup_at: Optional[datetime]
     created_at: datetime
     updated_at: datetime
 
@@ -107,6 +117,13 @@ class AdminCreate(BaseModel):
     access_description: Optional[str] = None
     telegram_id: Optional[str] = None
     telegram_token: Optional[str] = None
+    telegram_logger_id: Optional[str] = None
+    telegram_topic_id: Optional[str] = None
+    telegram_status: Optional[bool] = False
+    telegram_send_subscriptions: Optional[bool] = False
+    discord_webhook_status: Optional[bool] = False
+    discord_webhook_url: Optional[str] = None
+    discord_send_subscriptions: Optional[bool] = False
     expire_warning_days: Optional[int] = None
     usage_warning_percent: Optional[int] = None
     username_tag: Optional[bool] = None
@@ -132,6 +149,13 @@ class AdminUpdate(BaseModel):
     access_description: Optional[str] = None
     telegram_id: Optional[str] = None
     telegram_token: Optional[str] = None
+    telegram_topic_id: Optional[str] = None
+    telegram_logger_id: Optional[str] = None
+    telegram_status: Optional[bool] = None
+    telegram_send_subscriptions: Optional[bool] = None
+    discord_webhook_status: Optional[bool] = None
+    discord_webhook_url: Optional[str] = None
+    discord_send_subscriptions: Optional[bool] = None
     expire_warning_days: Optional[int] = None
     announce: Optional[str] = None
     announce_url: Optional[str] = None
@@ -139,6 +163,7 @@ class AdminUpdate(BaseModel):
     username_tag: Optional[bool] = None
     support_url: Optional[str] = None
     update_interval: Optional[int] = None
+    totp_status: Optional[bool] = None
 
 
 class AdminCurrentUpdate(BaseModel):
@@ -150,6 +175,13 @@ class AdminCurrentUpdate(BaseModel):
     access_description: Optional[str] = None
     telegram_id: Optional[str] = None
     telegram_token: Optional[str] = None
+    telegram_topic_id: Optional[str] = None
+    telegram_status: Optional[bool] = None
+    telegram_send_subscriptions: Optional[bool] = None
+    telegram_logger_id: Optional[str] = None
+    discord_webhook_status: Optional[bool] = None
+    discord_webhook_url: Optional[str] = None
+    discord_send_subscriptions: Optional[bool] = None
     expire_warning_days: Optional[int] = None
     usage_warning_percent: Optional[int] = None
     username_tag: Optional[bool] = None
@@ -157,6 +189,7 @@ class AdminCurrentUpdate(BaseModel):
     update_interval: Optional[int] = None
     announce: Optional[str] = None
     announce_url: Optional[str] = None
+    totp_status: Optional[bool] = None
 
 
 class AdminUsageLog(BaseModel):
