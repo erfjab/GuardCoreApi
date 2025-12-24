@@ -60,14 +60,19 @@ class RequestCore:
                         except Exception:
                             error_detail = await response.text()
 
+                        url = RequestCore._BASE_URL + endpoint
+                        error_msg = f"Invalid response ({response.status}): {error_detail}\nURL: {url}"
+                        if json:
+                            error_msg += f"\nData: {json}"
+                        elif data:
+                            error_msg += f"\nData: {data}"
+
                         if response.status == 401:
                             raise RequestAuthenticationError(
-                                f"Authentication failed: {error_detail}"
+                                f"Authentication failed: {error_detail}\nURL: {url}"
                             )
                         else:
-                            raise RequestResponseError(
-                                f"Invalid response ({response.status}): {error_detail}"
-                            )
+                            raise RequestResponseError(error_msg)
 
                     resp_json = await response.json()
                     if response_model:
@@ -76,9 +81,13 @@ class RequestCore:
                         return response_model(**resp_json)
                     return resp_json
         except aiohttp.ClientConnectionError as e:
-            raise RequestConnectionError("Connection error occurred") from e
+            url = RequestCore._BASE_URL + endpoint
+            raise RequestConnectionError(
+                f"Connection error occurred\nURL: {url}"
+            ) from e
         except asyncio.TimeoutError as e:
-            raise RequestTimeoutError("Request timed out") from e
+            url = RequestCore._BASE_URL + endpoint
+            raise RequestTimeoutError(f"Request timed out\nURL: {url}") from e
 
     @staticmethod
     async def get(
@@ -103,6 +112,7 @@ class RequestCore:
     async def post(
         endpoint: str,
         headers: Optional[dict] = None,
+        params: Optional[dict] = None,
         data: Optional[dict] = None,
         json: Optional[dict] = None,
         timeout: float = 10.0,
@@ -113,6 +123,7 @@ class RequestCore:
             endpoint=endpoint,
             method="POST",
             headers=headers,
+            params=params if params else None,
             data=data,
             json=json,
             timeout=timeout,
@@ -124,6 +135,7 @@ class RequestCore:
     async def put(
         endpoint: str,
         headers: Optional[dict] = None,
+        params: Optional[dict] = None,
         data: Optional[dict] = None,
         json: Optional[dict] = None,
         timeout: float = 10.0,
@@ -134,6 +146,7 @@ class RequestCore:
             endpoint=endpoint,
             method="PUT",
             headers=headers,
+            params=params if params else None,
             data=data,
             json=json,
             timeout=timeout,
