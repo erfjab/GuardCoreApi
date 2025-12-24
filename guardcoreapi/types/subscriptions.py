@@ -3,6 +3,26 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
+class AutoRenewalCreate(BaseModel):
+    limit_expire: int
+    limit_usage: int
+    reset_usage: bool = False
+
+
+class AutoRenewalResponse(BaseModel):
+    id: int
+    limit_expire: Optional[int]
+    limit_usage: Optional[int]
+    reset_usage: bool
+
+
+class AutoRenewalUpdate(BaseModel):
+    id: int
+    limit_expire: Optional[int]
+    limit_usage: Optional[int]
+    reset_usage: Optional[bool]
+
+
 class SubscriptionResponse(BaseModel):
     id: int
     username: str
@@ -24,9 +44,12 @@ class SubscriptionResponse(BaseModel):
     total_usage: int
     current_usage: int
     limit_expire: int
+    auto_delete_days: int
 
     service_ids: list[int]
     note: Optional[str]
+    telegram_id: Optional[str]
+    discord_webhook_url: Optional[str]
 
     online_at: Optional[datetime]
     last_reset_at: Optional[datetime]
@@ -35,6 +58,8 @@ class SubscriptionResponse(BaseModel):
     last_client_agent: Optional[str]
     created_at: datetime
     updated_at: datetime
+
+    auto_renewals: list[AutoRenewalResponse] = []
 
     class Config:
         from_attributes = True
@@ -47,6 +72,10 @@ class SubscriptionCreate(BaseModel):
     service_ids: list[int]
     access_key: Optional[str] = None
     note: Optional[str] = None
+    telegram_id: Optional[str] = None
+    discord_webhook_url: Optional[str] = None
+    auto_delete_days: Optional[int] = None
+    auto_renewals: Optional[list[AutoRenewalCreate]] = []
 
 
 class SubscriptionUpdate(BaseModel):
@@ -55,6 +84,10 @@ class SubscriptionUpdate(BaseModel):
     limit_expire: Optional[int] = None
     service_ids: Optional[list[int]] = None
     note: Optional[str] = None
+    telegram_id: Optional[str] = None
+    discord_webhook_url: Optional[str] = None
+    auto_delete_days: Optional[int] = None
+    auto_renewals: Optional[list[AutoRenewalUpdate]] = None
 
 
 class SubscriptionUsageLog(BaseModel):

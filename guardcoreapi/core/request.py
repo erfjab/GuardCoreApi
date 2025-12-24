@@ -53,18 +53,28 @@ class RequestCore:
                     data=data,
                     json=json,
                 ) as response:
-                    response.raise_for_status()
+                    if response.status >= 400:
+                        try:
+                            error_data = await response.json()
+                            error_detail = error_data.get("detail", "Unknown error")
+                        except Exception:
+                            error_detail = await response.text()
+
+                        if response.status == 401:
+                            raise RequestAuthenticationError(
+                                f"Authentication failed: {error_detail}"
+                            )
+                        else:
+                            raise RequestResponseError(
+                                f"Invalid response ({response.status}): {error_detail}"
+                            )
+
                     resp_json = await response.json()
                     if response_model:
                         if use_list:
                             return [response_model(**item) for item in resp_json]
                         return response_model(**resp_json)
                     return resp_json
-        except aiohttp.ClientResponseError as e:
-            if e.status == 401:
-                raise RequestAuthenticationError("Authentication failed") from e
-            else:
-                raise RequestResponseError(f"Invalid response: {e.status}") from e
         except aiohttp.ClientConnectionError as e:
             raise RequestConnectionError("Connection error occurred") from e
         except asyncio.TimeoutError as e:

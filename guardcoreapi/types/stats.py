@@ -30,6 +30,15 @@ class SubscriptionStatusStatsResponse(BaseModel):
     unavailable: int
     online: int
     offline: int
+    last_24h_online: int
+    last_24h_usage: int
+
+
+class LastReachedSubscriptionDetail(BaseModel):
+    username: str
+    reached_at: datetime
+    limited: bool
+    expired: bool
 
 
 class MostUsageSubscription(BaseModel):

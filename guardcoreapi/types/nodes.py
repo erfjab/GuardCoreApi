@@ -6,6 +6,7 @@ from pydantic import BaseModel
 class NodeCategory(StrEnum):
     marzban = "marzban"
     marzneshin = "marzneshin"
+    rustneshin = "rustneshin"
 
 
 class NodeResponse(BaseModel):
@@ -21,6 +22,7 @@ class NodeResponse(BaseModel):
     usage_rate: float | None
     offset_link: int
     batch_size: int
+    priority: int
     created_at: datetime
     updated_at: datetime
 
@@ -36,6 +38,7 @@ class NodeCreate(BaseModel):
     host: str
     offset_link: int = 0
     batch_size: int = 1
+    priority: int = 0
     usage_rate: float = 1.0
 
 
@@ -46,6 +49,7 @@ class NodeUpdate(BaseModel):
     host: str | None = None
     offset_link: int | None = None
     batch_size: int | None = None
+    priority: int | None = None
     usage_rate: float | None = None
 
 
